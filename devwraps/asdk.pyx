@@ -58,6 +58,7 @@ cdef class ASDK:
         memset(self.serial_number, 0, MAX_SERIAL_NUMBER)
         self.opened = 0
         self.transform = None
+        self.shape = "round"
 
     def get_devices(self, dpath=None, ignore=[], try_open=False):
         if dpath is None:

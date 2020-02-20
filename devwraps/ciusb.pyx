@@ -64,6 +64,7 @@ cdef class CIUsb:
         self.opened = 0
         self.dev = -1
         self.transform = None
+        self.shape = "square"
 
     def open(self, dev=None):
         if self.opened and dev is not None:
