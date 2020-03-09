@@ -58,6 +58,7 @@ cdef class CIUsb:
     cdef int opened
     cdef int dev
     cdef object transform
+    cdef public object shape
 
     def __cinit__(self):
         self.c_ciusb = CCIUsb()

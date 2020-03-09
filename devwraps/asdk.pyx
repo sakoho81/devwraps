@@ -49,13 +49,15 @@ DEF MAX_SERIAL_NUMBER = 128
 cdef class ASDK:
     cdef asdkDM *dm
     cdef UInt nacts
-    cdef char serial_number[MAX_SERIAL_NUMBER]
+    cdef char* serial_number
     cdef int opened
     cdef Scalar *doubles
     cdef object transform
+    cdef public object shape
+
 
     def __cinit__(self):
-        memset(self.serial_number, 0, MAX_SERIAL_NUMBER)
+        #memset(self.serial_number, 0, MAX_SERIAL_NUMBER)
         self.opened = 0
         self.transform = None
         self.shape = "round"
@@ -115,11 +117,9 @@ cdef class ASDK:
             raise Exception(
                 f'{dev} must be less than {MAX_SERIAL_NUMBER} characters long')
 
-        pystr = dev.encode('utf-8')
-        cp = pystr
-        memset(self.serial_number, 0, MAX_SERIAL_NUMBER)
-        memcpy(self.serial_number, cp, len(pystr))
-
+        dev_cstring = dev.encode('UTF-8')
+        self.serial_number = dev_cstring
+      
         self.dm = asdkInit(self.serial_number)
         if self.dm is NULL:
             raise Exception(f'failed to open {dev}')
@@ -132,7 +132,7 @@ cdef class ASDK:
         else:
             self.nacts = <UInt>tmp
 
-        self.doubles = <Scalar *>malloc(self.nact*sizeof(Scalar))
+        self.doubles = <Scalar *>malloc(self.nacts*sizeof(Scalar))
         if not self.doubles:
             asdkRelease(self.dm)
             self.dm = NULL
@@ -210,7 +210,7 @@ cdef class ASDK:
 
             self.doubles[i] = val
 
-        ret = asdkSend(self.dm, self.doubles);
+        ret = asdkSend(self.dm, self.doubles)
         if ret != SUCCESS:
             raise ValueError('Error in write')
 

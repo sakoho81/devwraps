@@ -9,3 +9,5 @@ dist/
 *.pyd
 __pycache__/
 /devwraps/version.py
+*.log
+.vscode/

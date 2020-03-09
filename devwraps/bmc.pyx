@@ -75,6 +75,7 @@ cdef class BMC:
     cdef int opened
     cdef double *doubles
     cdef object transform
+    cdef public object shape
 
     def __cinit__(self):
         memset(self.serial_number, 0, 12)
