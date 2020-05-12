@@ -49,7 +49,7 @@ DEF MAX_SERIAL_NUMBER = 128
 cdef class ASDK:
     cdef asdkDM *dm
     cdef UInt nacts
-    cdef char* serial_number
+    cdef public object serial_number
     cdef int opened
     cdef Scalar *doubles
     cdef object transform
@@ -61,6 +61,7 @@ cdef class ASDK:
         self.opened = 0
         self.transform = None
         self.geometry = "round"
+        self.serial_number = "not_connected"
 
     def get_devices(self, dpath=None, ignore=[], try_open=False):
         if dpath is None:
@@ -117,10 +118,9 @@ cdef class ASDK:
             raise Exception(
                 f'{dev} must be less than {MAX_SERIAL_NUMBER} characters long')
 
-        dev_cstring = dev.encode('UTF-8')
-        self.serial_number = dev_cstring
-      
-        self.dm = asdkInit(self.serial_number)
+        self.serial_number = dev
+        self.dm = asdkInit(self.serial_number.encode('UTF-8'))
+
         if self.dm is NULL:
             raise Exception(f'failed to open {dev}')
 
@@ -159,6 +159,7 @@ cdef class ASDK:
                 raise Exception(f'Error closing DM {ret1} {ret2}')
 
         self.opened = 0
+        self.serial_number = "not_connected"
 
     def size(self):
         "Number of actuators."
@@ -259,7 +260,4 @@ cdef class ASDK:
         self.transform = tx
 
     def get_serial_number(self):
-        if self.opened:
-            return self.serial_number.decode('utf-8')
-        else:
-            return None
+        return self.serial_number
