@@ -53,14 +53,14 @@ cdef class ASDK:
     cdef int opened
     cdef Scalar *doubles
     cdef object transform
-    cdef public object shape
+    cdef public object geometry
 
 
     def __cinit__(self):
         #memset(self.serial_number, 0, MAX_SERIAL_NUMBER)
         self.opened = 0
         self.transform = None
-        self.shape = "round"
+        self.geometry = "round"
 
     def get_devices(self, dpath=None, ignore=[], try_open=False):
         if dpath is None:

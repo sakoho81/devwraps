@@ -75,13 +75,13 @@ cdef class BMC:
     cdef int opened
     cdef double *doubles
     cdef object transform
-    cdef public object shape
+    cdef public object geometry
 
     def __cinit__(self):
         memset(self.serial_number, 0, 12)
         self.opened = 0
         self.transform = None
-        self.shape = "square"
+        self.geometry = "square"
 
     def get_devices(self, dpath=None, ignore=None, try_open=False):
         if dpath is None:

@@ -58,14 +58,14 @@ cdef class CIUsb:
     cdef int opened
     cdef int dev
     cdef object transform
-    cdef public object shape
+    cdef public object geometry
 
     def __cinit__(self):
         self.c_ciusb = CCIUsb()
         self.opened = 0
         self.dev = -1
         self.transform = None
-        self.shape = "square"
+        self.geometry = "square"
 
     def open(self, dev=None):
         if self.opened and dev is not None:
