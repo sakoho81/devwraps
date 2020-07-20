@@ -50,7 +50,7 @@ cdef class ASDK:
     cdef asdkDM *dm
     cdef UInt nacts
     cdef public object serial_number
-    cdef int opened
+    cdef public object opened
     cdef Scalar *doubles
     cdef object transform
     cdef public object geometry
